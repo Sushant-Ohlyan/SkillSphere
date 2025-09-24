@@ -10,7 +10,9 @@ const userRouter = require('./routes/userRoutes');
 dotenv.config();
 const app = express();
 
-app.use(cors({ credentials: true }));
+const allowedOrigins = [process.env.FRONTEND_URL];
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
