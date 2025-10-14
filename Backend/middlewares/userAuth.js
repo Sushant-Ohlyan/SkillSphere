@@ -1,24 +1,37 @@
+// middlewares/userAuth.js
 const jwt = require('jsonwebtoken');
-const { Model } = require('mongoose');
 
-const userAuth= async(req,resizeBy,next)=>{
-    const{token}=req.cookies;
-    if(!token){
-        return res.json({success:false, message: 'not authorized'});
-    }
-    try{
-        const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
+const userAuth = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
 
-        if(tokenDecode.id){
-            req.body.userId = tokenDecode.id;
-        }
-        else{
-            return res.json({success:false, message: 'not authorized'});
-        }
-        next();
-    }catch(err){
-        return res.json({success:false, message: err.message});
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized — No token provided',
+      });
     }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded?.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized — Invalid token',
+      });
+    }
+
+    // Attach userId to request body for controller access
+    req.body.userId = decoded.id;
+
+    next();
+  } catch (err) {
+    console.error('⚠️ Auth Error:', err.message);
+    return res.status(401).json({
+      success: false,
+      message: 'Token verification failed: ' + err.message,
+    });
+  }
 };
 
 module.exports = userAuth;

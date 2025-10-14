@@ -1,33 +1,53 @@
-const express = require('express');
+// index.js
 const dotenv = require('dotenv');
-const connectDB = require('./config/Db.js');
-const app = require('./server.js');
-
 dotenv.config();
 
+const mongoose = require('mongoose');
+const connectDB = require('./config/Db.js');
+const app = require('./app.js');
+const chalk = require('chalk');
+
+const PORT = process.env.PORT || 5000;
+
 const startServer = async () => {
-    try{
-        await connectDB();
+  try {
+    // ✅ Connect Database
+    await connectDB();
 
-        const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
+    // ✅ Start Server
+    const server = app.listen(PORT, () => {
+      console.log(chalk.green(`🚀 Server running on port ${PORT}`));
+    });
 
-    }catch(error){
-        console.error("Failed to start server:", error);
-        process.exit(1);
-    }
+    // ✅ Graceful Shutdown
+    const shutdown = async (signal) => {
+      console.log(chalk.yellow(`\n${signal} received. Shutting down gracefully...`));
+      server.close(() => {
+        console.log(chalk.blue('🛑 Server closed'));
+      });
+      await mongoose.connection.close();
+      console.log(chalk.magenta('🔌 MongoDB disconnected'));
+      process.exit(0);
+    };
+
+    process.on('SIGINT', () => shutdown('SIGINT'));
+    process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+  } catch (error) {
+    console.error(chalk.red('❌ Failed to start server:', error));
+    process.exit(1);
+  }
 };
 
-process.on('unhandledRejection', (err, promise) => {
-    console.log(`Logged Error: ${err.message}`);
-    process.exit(1);
+// ✅ Handle unhandled errors
+process.on('unhandledRejection', (err) => {
+  console.error(chalk.red(`⚠️ Unhandled Rejection: ${err.message}`));
+  process.exit(1);
 });
 
 process.on('uncaughtException', (err) => {
-    console.log(`Logged Error: ${err.message}`);
-    process.exit(1);
+  console.error(chalk.red(`💥 Uncaught Exception: ${err.message}`));
+  process.exit(1);
 });
 
 startServer();
