@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const authRouter = require('./routes/authRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const userRouter = require('./routes/userRoutes');
+const contactRouter = require('./routes/contactRoutes');
 
 dotenv.config();
 const app = express();
@@ -43,6 +44,7 @@ app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny'));
 app.use('/api/auth', authRouter);
 app.use('/api/home', homeRoutes);
 app.use('/api/user', userRouter);
+app.use('/api/contact', contactRouter);
 
 // ✅ Base Route
 app.get('/', (req, res) => {
