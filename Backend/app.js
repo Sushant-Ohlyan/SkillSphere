@@ -10,6 +10,7 @@ const authRouter = require('./routes/authRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const userRouter = require('./routes/userRoutes');
 const contactRouter = require('./routes/contactRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 dotenv.config();
 const app = express();
@@ -45,6 +46,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/home', homeRoutes);
 app.use('/api/user', userRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/reviews', reviewRouter);
 
 // ✅ Base Route
 app.get('/', (req, res) => {
