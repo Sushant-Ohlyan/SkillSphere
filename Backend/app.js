@@ -11,6 +11,7 @@ const homeRoutes = require('./routes/homeRoutes');
 const userRouter = require('./routes/userRoutes');
 const contactRouter = require('./routes/contactRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const youtubeRoutes = require('./routes/youtubeRoutes');
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,7 @@ app.use('/api/home', homeRoutes);
 app.use('/api/user', userRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/reviews', reviewRouter);
+app.use('/api/youtube', youtubeRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

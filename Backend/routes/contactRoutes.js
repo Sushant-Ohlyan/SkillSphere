@@ -1,7 +1,7 @@
 const express = require('express');
 const {createContactEntry} = require('../controllers/contactController');
-const {contactLimiter} = require('../middlewares/rateLimiter');
-const {validateContactInput} = require('../middlewares/validateContactInput');
+const contactLimiter = require('../middlewares/rateLimiter');
+const validateContactInput = require('../middlewares/validateContactInput');
 
 const contactRouter = express.Router();
 
