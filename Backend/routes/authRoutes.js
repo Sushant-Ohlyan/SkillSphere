@@ -1,5 +1,5 @@
 const express = require('express');
-const authRouter = express.Router();
+
 const {
   registerUser,
   loginUser,
@@ -12,6 +12,7 @@ const {
 } = require('../controllers/authController');
 const userAuth = require('../middlewares/userAuth');
 
+const authRouter = express.Router();
 // Public Routes
 authRouter.post('/register', registerUser);
 authRouter.post('/login', loginUser);

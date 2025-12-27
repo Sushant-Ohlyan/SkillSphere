@@ -11,22 +11,19 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // ✅ Connect Database
     await connectDB();
 
-    // ✅ Start Server
     const server = app.listen(PORT, () => {
-      console.log(chalk.green(`🚀 Server running on port ${PORT}`));
+      console.log(chalk.green(`Server running on port ${PORT}`));
     });
 
-    // ✅ Graceful Shutdown
     const shutdown = async (signal) => {
       console.log(chalk.yellow(`\n${signal} received. Shutting down gracefully...`));
       server.close(() => {
-        console.log(chalk.blue('🛑 Server closed'));
+        console.log(chalk.blue('Server closed'));
       });
       await mongoose.connection.close();
-      console.log(chalk.magenta('🔌 MongoDB disconnected'));
+      console.log(chalk.magenta('MongoDB disconnected'));
       process.exit(0);
     };
 
@@ -34,19 +31,18 @@ const startServer = async () => {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
 
   } catch (error) {
-    console.error(chalk.red('❌ Failed to start server:', error));
+    console.error(chalk.red('Failed to start server:', error));
     process.exit(1);
   }
 };
 
-// ✅ Handle unhandled errors
 process.on('unhandledRejection', (err) => {
-  console.error(chalk.red(`⚠️ Unhandled Rejection: ${err.message}`));
+  console.error(chalk.red(` Unhandled Rejection: ${err.message}`));
   process.exit(1);
 });
 
 process.on('uncaughtException', (err) => {
-  console.error(chalk.red(`💥 Uncaught Exception: ${err.message}`));
+  console.error(chalk.red(`Uncaught Exception: ${err.message}`));
   process.exit(1);
 });
 

@@ -2,12 +2,11 @@
 const Review = require('../models/reviewModel');
 const User = require('../models/userModel'); // 👈 import User model
 
-// Create review (only for logged-in users)
+
 const createReview = async (req, res) => {
   try {
     const { rating, comment } = req.body;
 
-    // ✅ userId provided by userAuth
     const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
@@ -15,7 +14,7 @@ const createReview = async (req, res) => {
 
     const newReview = new Review({
       userId: user._id,
-      userName: user.name, // auto-filled from user model
+      userName: user.name, 
       rating,
       comment,
     });
@@ -36,19 +35,29 @@ const createReview = async (req, res) => {
   }
 };
 
-// Get all reviews (public)
+
+const Review = require('../models/Review');
+
 const getReviews = async (req, res) => {
   try {
-    // ✅ populate user's basic info (optional)
-    const reviews = await Review.find().populate('userId', 'name email');
-    res.status(200).json({ success: true, reviews });
+  
+    const reviews = await Review.find()
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 }); 
+    return res.status(200).json({
+      success: true,
+      reviews,
+    });
   } catch (error) {
     console.error('Error fetching reviews:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Error fetching reviews',
     });
   }
 };
+
+
+
 
 module.exports = { createReview, getReviews };

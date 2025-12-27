@@ -6,7 +6,6 @@ const { body, validationResult } = require('express-validator');
 
 const reviewRouter = express.Router();
 
-// ✅ Input validation
 const validateReview = [
   body('rating')
     .isInt({ min: 1, max: 5 })
@@ -23,7 +22,7 @@ const validateReview = [
   },
 ];
 
-// ✅ Routes
+
 reviewRouter.post('/', userAuth, validateReview, createReview);
 reviewRouter.get('/', getReviews);
 
