@@ -1,9 +1,6 @@
 const transporter = require('../config/nodeMailer');
 require('dotenv').config();
 
-/**
- * Send confirmation email to user
- */
 const sendUserConfirmation = async (name, email) => {
   try {
     await transporter.sendMail({
@@ -24,9 +21,7 @@ Support Team`,
   }
 };
 
-/**
- * Send notification email to admin/support team
- */
+
 const sendAdminNotification = async (name, email, message) => {
   try {
     await transporter.sendMail({
